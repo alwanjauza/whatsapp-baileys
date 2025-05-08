@@ -14,6 +14,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup SSH key
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_ci_cd
@@ -21,6 +23,9 @@ jobs:
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS via SSH
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          NODE_ENV: production
         run: |
           ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@$SSH_HOST << 'EOF'
             export PATH=/root/.nvm/versions/node/v23.11.0/bin:$PATH
@@ -28,5 +33,3 @@ jobs:
             git pull origin main
             pm2 restart whatsapp-bot || pm2 start src/server.js --name whatsapp-bot
           EOF
-        env:
-          NODE_ENV: production
