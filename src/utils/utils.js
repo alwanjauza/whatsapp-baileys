@@ -132,11 +132,11 @@ async function handleReminderCommand(text, msg, from, sock) {
 
   await sock.sendMessage(from, {
     text: `╭────〔 🔔 PENGINGAT AKTIF 〕────
-│ ⏰ Reminder berhasil di-set!
-│ 💬 Akan mengingatkan dalam ${duration} ${unit}.
-│ 📝 Pesan: "${reminderText}"
-│ 📆 Waktu: ${reminderTime.format("LLLL")}
-╰─────────────────────────╯`,
+┊ ⏰ Reminder berhasil di-set!
+┊ 💬 Akan mengingatkan dalam ${duration} ${unit}.
+┊ 📝 Pesan: "${reminderText}"
+┊ 📆 Waktu: ${reminderTime.format("LLLL")}
+╰──────────────────────`,
   });
 
   setTimeout(async () => {
