@@ -1,0 +1,41 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main  # Ganti dengan branch yang kamu gunakan jika tidak main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Setup Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Ganti dengan versi node yang sesuai
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+
+      # Copy SSH private key to GitHub Actions runner
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Deploy to VPS (pull latest code & restart the app)
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_ci_cd ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} << 'EOF'
+            cd ~/whatsapp-baileys || exit
+            git pull origin main || exit
+            pm2 restart whatsapp-bot || exit
+          EOF
