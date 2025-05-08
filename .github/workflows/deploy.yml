@@ -20,12 +20,13 @@ jobs:
           chmod 600 ~/.ssh/id_rsa_ci_cd
           ssh-keyscan -H 8.215.36.233 >> ~/.ssh/known_hosts
 
-      - name: Deploy to Server
+      - name: Deploy to VPS via SSH
         run: |
           ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@8.215.36.233 << 'EOF'
+            export PATH=/root/.nvm/versions/node/v23.11.0/bin:$PATH
             cd /root/whatsapp-baileys
             git pull origin main
-            /root/.nvm/versions/node/v23.11.0/bin/pm2 restart whatsapp-bot || /root/.nvm/versions/node/v23.11.0/bin/pm2 start src/server.js --name whatsapp-bot
+            pm2 restart whatsapp-bot || pm2 start src/server.js --name whatsapp-bot
           EOF
         env:
           NODE_ENV: production
