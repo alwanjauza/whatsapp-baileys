@@ -1,4 +1,4 @@
-name: Deploy WhatsApp Bot to VPS
+name: Deploy WhatsApp Bot
 
 on:
   push:
@@ -13,17 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_ci_cd
-          chmod 600 ~/.ssh/id_rsa_ci_cd
-          ssh-keyscan -H 8.215.36.233 >> ~/.ssh/known_hosts
-
       - name: Deploy to Server
         run: |
           ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@8.215.36.233 << 'EOF'
             cd /root/whatsapp-baileys
             git pull origin main
-            pm2 restart whatsapp-bot || pm2 start src/server.js --name whatsapp-bot
+            /root/.nvm/versions/node/v23.11.0/bin/pm2 restart whatsapp-bot || /root/.nvm/versions/node/v23.11.0/bin/pm2 start src/server.js --name whatsapp-bot
           EOF
+        env:
+          NODE_ENV: production
