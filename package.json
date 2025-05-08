@@ -19,6 +19,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "moment": "^2.30.1",
+    "openai": "^4.97.0",
     "qrcode-terminal": "^0.12.0",
     "sharp": "^0.32.6"
   },

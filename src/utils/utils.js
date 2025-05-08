@@ -235,10 +235,100 @@ async function getWeatherInfo(text, msg, from, sock) {
   }
 }
 
+async function handleChatAiCommand(text, msg, from, sock) {
+  await sock.sendMessage(from, {
+    react: {
+      text: "⌛",
+      key: msg.key,
+    },
+  });
+
+  const match = text.match(/^#tanya\s+(.+)/i);
+
+  if (!match) {
+    await sock.sendMessage(from, {
+      text: `╭─〔 ⚠️ FORMAT TIDAK VALID 〕─
+┊ 💬 Perintah tidak dikenali.
+┊ Contoh format benar:
+┊ #tanya Apa itu cuaca?
+┊
+┊ Silakan coba lagi.
+╰──────────────────────`,
+    });
+    await sock.sendMessage(from, {
+      react: {
+        text: "❌",
+        key: msg.key,
+      },
+    });
+    return;
+  }
+
+  const prompt = match[1];
+  const apiKey = process.env.AIML_API_KEY;
+  const url = "https://api.aimlapi.com/v1/chat/completions";
+
+  try {
+    const response = await axios.post(
+      url,
+      {
+        model: "deepseek/deepseek-r1",
+        messages: [
+          {
+            role: "system",
+            content:
+              "Kamu adalah asisten pintar yang membantu dengan jawaban singkat dan jelas.",
+          },
+          { role: "user", content: prompt },
+        ],
+        max_tokens: 100,
+        temperature: 0.7,
+        stream: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const reply =
+      response?.data?.choices[0]?.message?.content ?? "Tidak ada jawaban!";
+
+    await sock.sendMessage(from, {
+      text: `╭─〔 🤖 JAWABAN AI 〕─
+  ┊ 💬 Pertanyaan: ${prompt}
+  ┊
+  ┊ 🧠 Jawaban:
+  ┊ ${reply}
+  ╰──────────────────────`,
+    });
+
+    await sock.sendMessage(from, {
+      react: { text: "✅", key: msg.key },
+    });
+  } catch (error) {
+    console.error("❌ Gagal memproses chat AI:", err);
+    await sock.sendMessage(from, {
+      text: `╭─〔 ⚠️ GAGAL MEMPROSES 〕─
+┊ 💬 Tidak bisa menjawab saat ini.
+┊ 🚫 Alasan: ${err.message}
+┊
+┊ Coba lagi nanti ya.
+╰──────────────────────`,
+    });
+    await sock.sendMessage(from, {
+      react: { text: "❌", key: msg.key },
+    });
+  }
+}
+
 module.exports = {
   convertToSticker,
   menuInfo,
   sendStockInfo,
   handleReminderCommand,
   getWeatherInfo,
+  handleChatAiCommand,
 };

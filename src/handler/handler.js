@@ -6,6 +6,7 @@ const {
   handleReminderCommand,
   menuInfo,
   getWeatherInfo,
+  handleChatAiCommand,
 } = require("../utils/utils");
 
 async function handleSticker(msg, from, sock) {
@@ -79,6 +80,8 @@ async function handleMessages(msgUpdate, sock) {
     await handleReminderCommand(text, msg, from, sock);
   } else if (text.startsWith("#cuaca")) {
     await getWeatherInfo(text, msg, from, sock);
+  } else if (text.startsWith("#tanya")) {
+    await handleChatAiCommand(text, msg, from, sock);
   }
 }
 
