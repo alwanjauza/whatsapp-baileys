@@ -1,41 +1,30 @@
-name: Deploy to VPS
+name: Deploy WhatsApp Bot to VPS
 
 on:
   push:
     branches:
-      - main  # Ganti dengan branch yang kamu gunakan jika tidak main
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Setup Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'  # Ganti dengan versi node yang sesuai
-
-      # Install dependencies
-      - name: Install dependencies
+      - name: Setup SSH key
         run: |
-          npm install
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_DEPLOY_KEY }}" > ~/.ssh/id_rsa_ci_cd
+          chmod 600 ~/.ssh/id_rsa_ci_cd
+          ssh-keyscan -p 22 8.215.36.233 >> ~/.ssh/known_hosts
 
-      # Copy SSH private key to GitHub Actions runner
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      # Deploy to VPS (pull latest code & restart the app)
-      - name: Deploy to VPS
+      - name: Deploy via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_ci_cd ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} << 'EOF'
-            cd ~/whatsapp-baileys || exit
-            git pull origin main || exit
-            pm2 restart whatsapp-bot || exit
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_ci_cd root@8.215.36.233 -p 22 << 'EOF'
+            cd /root/whatsapp-baileys
+            git pull origin main
+            pm2 restart all || pm2 start src/server.js --name whatsapp-bot
           EOF
+
