@@ -5,6 +5,7 @@ const {
   convertToSticker,
   handleReminderCommand,
   menuInfo,
+  getWeatherInfo,
 } = require("../utils/utils");
 
 async function handleSticker(msg, from, sock) {
@@ -76,6 +77,8 @@ async function handleMessages(msgUpdate, sock) {
     await sendStockInfo(msg, from, sock);
   } else if (text.startsWith("#remind me")) {
     await handleReminderCommand(text, msg, from, sock);
+  } else if (text.startsWith("#cuaca")) {
+    await getWeatherInfo(text, msg, from, sock);
   }
 }
 

@@ -1,5 +1,7 @@
 const sharp = require("sharp");
 const moment = require("moment");
+const axios = require("axios");
+require("dotenv").config();
 
 async function convertToSticker(buffer) {
   return await sharp(buffer)
@@ -22,6 +24,7 @@ async function menuInfo(msg, from, sock) {
 ┊ 📄 Perintah yang tersedia:
 ┊ 
 ┊ 🔹 #menu → Tampilkan menu
+┊ 🔹 #cuaca → Tampilkan informasi cuaca
 ┊ 🔹 #sticker → Kirim gambar dengan caption #sticker
 ┊ 🔹 #stock → Lihat stok produk
 ┊ 🔹 #buynow → Beli produk
@@ -155,9 +158,87 @@ async function handleReminderCommand(text, msg, from, sock) {
   });
 }
 
+async function getWeatherInfo(text, msg, from, sock) {
+  const match = text.match(/#cuaca (.+)/i);
+  await sock.sendMessage(from, {
+    react: {
+      text: "⏳",
+      key: msg.key,
+    },
+  });
+  if (!match) {
+    await sock.sendMessage(from, {
+      text: `╭─〔 ⚠️ FORMAT TIDAK VALID 〕─
+┊ 💬 Perintah tidak dikenali.
+┊ Contoh format benar:
+┊ #cuaca Jakarta
+┊
+┊ Silakan coba lagi.
+╰──────────────────────`,
+    });
+    await sock.sendMessage(from, {
+      react: {
+        text: "❌",
+        key: msg.key,
+      },
+    });
+    return;
+  }
+
+  const city = match[1].trim();
+  const apiKey = process.env.OPENWEATHER_API_KEY;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+    city
+  )}&appid=${apiKey}&units=metric&lang=id`;
+
+  try {
+    const res = await axios.get(url);
+    const data = res.data;
+
+    const description = data.weather[0].description;
+    const temp = data.main.temp;
+    const feelsLike = data.main.feels_like;
+    const humidity = data.main.humidity;
+    const wind = data.wind.speed;
+
+    const message = `╭────〔 🌤️ RAMALAN CUACA 〕────
+┊ 📍 Lokasi: ${data.name}
+┊ 🌡️ Suhu: ${temp}°C (terasa seperti ${feelsLike}°C)
+┊ 💧 Kelembapan: ${humidity}%
+┊ 💨 Angin: ${wind} m/s
+┊ 📖 Cuaca: ${description}
+╰──────────────────────`;
+
+    await sock.sendMessage(from, { text: message });
+
+    await sock.sendMessage(from, {
+      react: {
+        text: "✅",
+        key: msg.key,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Gagal mengambil data cuaca:", error.message);
+    await sock.sendMessage(from, {
+      text: `╭─〔 ⚠️ GAGAL MENGAMBIL DATA 〕─
+┊ 💬 Tidak bisa mendapatkan info cuaca.
+┊ 📍 Kota: ${city}
+┊ 📌 Pastikan nama kota benar.
+╰──────────────────────`,
+    });
+    await sock.sendMessage(from, {
+      react: {
+        text: "❌",
+        key: msg.key,
+      },
+    });
+  }
+}
+
 module.exports = {
   convertToSticker,
   menuInfo,
   sendStockInfo,
   handleReminderCommand,
+  getWeatherInfo,
 };
