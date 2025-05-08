@@ -57,7 +57,6 @@ async function sendStockInfo(msg, from, sock) {
 ┊・ Untuk membeli Ketik Perintah Berikut
 ┊・ #buynow Kode(spasi)JumlahAkun
 ┊・ Ex: #buynow spo3b 1
-┊・ 
 ┊・ Pastikan Code & Jumlah Akun di Ketik dengan benar
 ┊・ Contact Admin: +6282141083589
 ╰──────────────────────
