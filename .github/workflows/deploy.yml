@@ -18,11 +18,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_ci_cd
           chmod 600 ~/.ssh/id_rsa_ci_cd
-          ssh-keyscan -H 8.215.36.233 >> ~/.ssh/known_hosts
+          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS via SSH
         run: |
-          ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@8.215.36.233 << 'EOF'
+          ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@$SSH_HOST << 'EOF'
             export PATH=/root/.nvm/versions/node/v23.11.0/bin:$PATH
             cd /root/whatsapp-baileys
             git pull origin main
