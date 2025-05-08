@@ -13,18 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH key
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_DEPLOY_KEY }}" > ~/.ssh/id_rsa_ci_cd
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_ci_cd
           chmod 600 ~/.ssh/id_rsa_ci_cd
-          ssh-keyscan -p 22 8.215.36.233 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 8.215.36.233 >> ~/.ssh/known_hosts
 
-      - name: Deploy via SSH
+      - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_ci_cd root@8.215.36.233 -p 22 << 'EOF'
+          ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@8.215.36.233 << 'EOF'
             cd /root/whatsapp-baileys
             git pull origin main
-            pm2 restart all || pm2 start src/server.js --name whatsapp-bot
+            pm2 restart whatsapp-bot || pm2 start src/server.js --name whatsapp-bot
           EOF
-
