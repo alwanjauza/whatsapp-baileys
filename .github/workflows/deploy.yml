@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_ci_cd
+          chmod 600 ~/.ssh/id_rsa_ci_cd
+          ssh-keyscan -H 8.215.36.233 >> ~/.ssh/known_hosts
+
       - name: Deploy to Server
         run: |
           ssh -i ~/.ssh/id_rsa_ci_cd -o StrictHostKeyChecking=no root@8.215.36.233 << 'EOF'
