@@ -71,7 +71,7 @@ Created by: @alwanjauza`,
       },
     });
   } catch (err) {
-    console.error("❌ Gagal mengirim informasi stock:", err);
+    console.error("❌ Gagal mengirim informasi stocks:", err);
   }
 }
 
