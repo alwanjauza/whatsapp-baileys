@@ -91,7 +91,7 @@ async function handleReminderCommand(text, msg, from, sock) {
 
   if (!match) {
     await sock.sendMessage(from, {
-      text: `╭─〔 ⚠️ FORMAT TIDAK VALID 〕─
+      text: `╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
 ┊ Contoh format benar:
 ┊ #remind me in 10 minutes to tidur
@@ -168,7 +168,7 @@ async function getWeatherInfo(text, msg, from, sock) {
   });
   if (!match) {
     await sock.sendMessage(from, {
-      text: `╭─〔 ⚠️ FORMAT TIDAK VALID 〕─
+      text: `╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
 ┊ Contoh format benar:
 ┊ #cuaca Jakarta
@@ -220,7 +220,7 @@ async function getWeatherInfo(text, msg, from, sock) {
   } catch (error) {
     console.error("❌ Gagal mengambil data cuaca:", error.message);
     await sock.sendMessage(from, {
-      text: `╭─〔 ⚠️ GAGAL MENGAMBIL DATA 〕─
+      text: `╭────〔 ⚠️ GAGAL MENGAMBIL DATA 〕────
 ┊ 💬 Tidak bisa mendapatkan info cuaca.
 ┊ 📍 Kota: ${city}
 ┊ 📌 Pastikan nama kota benar.
@@ -247,7 +247,7 @@ async function handleChatAiCommand(text, msg, from, sock) {
 
   if (!match) {
     await sock.sendMessage(from, {
-      text: `╭─〔 ⚠️ FORMAT TIDAK VALID 〕─
+      text: `╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
 ┊ Contoh format benar:
 ┊ #tanya Apa itu cuaca?
@@ -297,7 +297,7 @@ async function handleChatAiCommand(text, msg, from, sock) {
       response?.data?.choices[0]?.message?.content ?? "Tidak ada jawaban!";
 
     await sock.sendMessage(from, {
-      text: `╭─〔 🤖 JAWABAN AI 〕─
+      text: `╭────〔 🤖 JAWABAN AI 〕────
   ┊ 💬 Pertanyaan: ${prompt}
   ┊
   ┊ 🧠 Jawaban:
@@ -311,7 +311,7 @@ async function handleChatAiCommand(text, msg, from, sock) {
   } catch (error) {
     console.error("❌ Gagal memproses chat AI:", err);
     await sock.sendMessage(from, {
-      text: `╭─〔 ⚠️ GAGAL MEMPROSES 〕─
+      text: `╭────〔 ⚠️ GAGAL MEMPROSES 〕────
 ┊ 💬 Tidak bisa menjawab saat ini.
 ┊ 🚫 Alasan: ${err.message}
 ┊
