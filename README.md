@@ -119,7 +119,7 @@ jobs:
 
 Untuk menggunakan fitur AI Chat:
 
-- Pastikan kamu sudah memiliki API Key dari [https://api.aimlapi.com](https://api.aimlapi.com)
+- Pastikan kamu sudah memiliki API Key dari [https://aimlapi.com/app/](https://aimlapi.com/app/)
 - Gunakan endpoint `/v1/chat/completions` dengan model `deepseek/deepseek-r1`
 - Format prompt kamu di WhatsApp seperti:
 
@@ -139,16 +139,29 @@ Format valid:
 #tanya Siapa itu Elon Musk?
 ```
 
+Format valid akan dibalas:
+
+```
+╭────〔 🌤️ RAMALAN CUACA 〕────
+┊ 📍 Lokasi: Jakarta
+┊ 🌡️ Suhu: 27.97°C (terasa seperti 32.18°C)
+┊ 💧 Kelembapan: 81%
+┊ 💨 Angin: 2.06 m/s
+┊ 📖 Cuaca: awan tersebar
+╰──────────────────────
+
 Format tidak valid akan dibalas:
 
 ```
-📍 FORMAT TIDAK VALID
+
+╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
 ┊ Contoh format benar:
 ┊ #tanya Apa itu cuaca?
 ┊
 ┊ Silakan coba lagi.
 ╰──────────────────────
+
 ```
 
 ---
@@ -164,3 +177,4 @@ Format tidak valid akan dibalas:
 ## 📄 Lisensi
 
 Proyek ini dilisensikan di bawah lisensi MIT. Lihat LICENSE untuk informasi lebih lanjut.
+```
