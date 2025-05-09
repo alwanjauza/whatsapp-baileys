@@ -299,11 +299,11 @@ async function handleChatAiCommand(text, msg, from, sock) {
 
     await sock.sendMessage(from, {
       text: `╭────〔 🤖 JAWABAN AI 〕────
-  ┊ 💬 Pertanyaan: ${prompt}
-  ┊
-  ┊ 🧠 Jawaban:
-  ┊ ${reply}
-  ╰──────────────────────`,
+┊ 💬 Pertanyaan: ${prompt}
+┊
+┊ 🧠 Jawaban:
+┊ ${reply}
+╰──────────────────────`,
     });
 
     await sock.sendMessage(from, {
