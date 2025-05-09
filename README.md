@@ -173,4 +173,3 @@ Format tidak valid akan dibalas:
 ## 📄 Lisensi
 
 Proyek ini dilisensikan di bawah lisensi MIT. Lihat LICENSE untuk informasi lebih lanjut.
-```
