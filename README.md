@@ -153,7 +153,6 @@ Format valid akan dibalas:
 Format tidak valid akan dibalas:
 
 ```
-
 ╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
 ┊ Contoh format benar:
@@ -161,17 +160,14 @@ Format tidak valid akan dibalas:
 ┊
 ┊ Silakan coba lagi.
 ╰──────────────────────
-
 ```
 
 ---
-
 ## 👤 Dibuat Oleh
 
 - Nama: Alwan Jauza
 - GitHub: [@alwanjauza](https://github.com/alwanjauza)
 - Kontak: +6282141083589
-
 ---
 
 ## 📄 Lisensi
