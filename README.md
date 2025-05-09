@@ -149,9 +149,9 @@ Format valid akan dibalas:
 ┊ 💨 Angin: 2.06 m/s
 ┊ 📖 Cuaca: awan tersebar
 ╰──────────────────────
+```
 
 Format tidak valid akan dibalas:
-
 ```
 ╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
