@@ -28,6 +28,7 @@ async function menuInfo(msg, from, sock) {
 ┊ 🔹 #sticker → Kirim gambar dengan caption #sticker
 ┊ 🔹 #stock → Lihat stok produk
 ┊ 🔹 #buynow → Beli produk
+┊ 🔹 #tanya → Tanya sesuai ke AI
 ┊ 🔹 #remind me in → Atur pengingat
 ┊
 ┊ ❓ Butuh bantuan? Hubungi admin +6282141083589
