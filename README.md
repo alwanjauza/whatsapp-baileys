@@ -152,6 +152,7 @@ Format valid akan dibalas:
 ```
 
 Format tidak valid akan dibalas:
+
 ```
 ╭────〔 ⚠️ FORMAT TIDAK VALID 〕────
 ┊ 💬 Perintah tidak dikenali.
@@ -162,12 +163,6 @@ Format tidak valid akan dibalas:
 ╰──────────────────────
 ```
 
----
-## 👤 Dibuat Oleh
-
-- Nama: Alwan Jauza
-- GitHub: [@alwanjauza](https://github.com/alwanjauza)
-- Kontak: +6282141083589
 ---
 
 ## 📄 Lisensi
