@@ -325,6 +325,29 @@ async function handleChatAiCommand(text, msg, from, sock) {
   }
 }
 
+async function sendDailyQuote(sock, to) {
+  try {
+    const res = await axios.get("https://api.api-ninjas.com/v1/quotes", {
+      headers: {
+        "X-Api-Key": process.env.NINJA_API_KEY,
+      },
+    });
+
+    const quote = res.data[0];
+    const message = `╭──〔 🌄 QUOTE PAGI 〕──
+┊ 💬 *${quote.quote}*
+┊ ✍️ _${quote.author}_
+╰──────────────────────`;
+
+    await sock.sendMessage(to, {
+      text: message,
+    });
+    console.log("✅ Kutipan harian berhasil dikirim.");
+  } catch (error) {
+    console.error("❌ Gagal mengirim kutipan harian:", error?.message);
+  }
+}
+
 module.exports = {
   convertToSticker,
   menuInfo,
@@ -332,4 +355,5 @@ module.exports = {
   handleReminderCommand,
   getWeatherInfo,
   handleChatAiCommand,
+  sendDailyQuote,
 };

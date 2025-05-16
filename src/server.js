@@ -1,4 +1,5 @@
 const path = require("path");
+const cron = require("node-cron");
 require("dotenv").config();
 const {
   makeWASocket,
@@ -7,6 +8,7 @@ const {
   DisconnectReason,
 } = require("@whiskeysockets/baileys");
 const { handleMessages } = require("./handler/handler");
+const { sendDailyQuote } = require("./utils/utils");
 
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState(
@@ -34,6 +36,24 @@ async function startBot() {
       if (shouldReconnect) startBot();
     } else if (connection === "open") {
       console.log("✅ Terhubung ke WhatsApp!");
+
+      cron.schedule(
+        "0 6 * * *",
+        async () => {
+          const targets = [
+            process.env.OWNER_NUMBER,
+            process.env.PARTNER_NUMBER,
+          ];
+
+          for (const number of targets) {
+            await sendDailyQuote(sock, number);
+          }
+          console.log("📅 Kutipan harian berhasil dikirim.");
+        },
+        {
+          timezone: "Asia/Jakarta",
+        }
+      );
     }
   });
 
