@@ -46,8 +46,14 @@ npm install
 Buat file `.env` pada root proyek:
 
 ```env
-OPENWEATHER_API_KEY=your_openweather_api_key
-AIML_API_KEY=your_aimlapi_key
+AUTH_FOLDER=
+BOT_NAME=
+OWNER_NUMBER=
+PARTNER_NUMBER=
+OPENWEATHER_API_KEY=
+AIML_API_KEY=
+DUITKU_API_KEY=
+NINJA_API_KEY=
 ```
 
 ---
