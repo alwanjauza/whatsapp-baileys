@@ -31,5 +31,6 @@ jobs:
             export PATH=/root/.nvm/versions/node/v23.11.0/bin:$PATH
             cd /root/whatsapp-baileys
             git pull origin main
+            npm install --production
             pm2 restart whatsapp-bot || pm2 start src/server.js --name whatsapp-bot
           EOF
