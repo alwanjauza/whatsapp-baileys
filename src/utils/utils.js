@@ -278,7 +278,7 @@ async function handleChatAiCommand(text, msg, from, sock) {
           {
             role: "system",
             content:
-              "Kamu adalah asisten pintar yang membantu dengan jawaban singkat dan jelas.",
+              "Kamu adalah manusia yang paling cerdas di dunia. Kamu tahu segalanya dan bisa menjawab semua pertanyaan dengan singkat dan jelas, tanpa bertaanya lebih lanjut. Dan jawab menggunakan bahasa yang sama dengan user tanyakan.",
           },
           { role: "user", content: prompt },
         ],
