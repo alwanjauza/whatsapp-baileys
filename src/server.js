@@ -1,39 +1,45 @@
-const path = require("path");
-const cron = require("node-cron");
-require("dotenv").config();
 const {
   makeWASocket,
-  useMultiFileAuthState,
   fetchLatestBaileysVersion,
   DisconnectReason,
 } = require("@whiskeysockets/baileys");
+const cron = require("node-cron");
+require("dotenv").config();
 const { handleMessages } = require("./handler/handler");
 const { sendDailyQuote } = require("./utils/utils");
+const { useSQLiteAuthState } = require("./db/auth-state");
 
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState(
-    path.join(__dirname, process.env.AUTH_FOLDER || "auth")
-  );
+  const { state, saveCreds } = await useSQLiteAuthState();
   const { version } = await fetchLatestBaileysVersion();
 
   const sock = makeWASocket({
     version,
     auth: state,
-    printQRInTerminal: true,
   });
 
   sock.ev.on("creds.update", saveCreds);
 
-  sock.ev.on("connection.update", (update) => {
-    const { connection, lastDisconnect } = update;
+  sock.ev.on("connection.update", async (update) => {
+    const { connection, lastDisconnect, qr } = update;
 
     if (connection === "close") {
       const shouldReconnect =
         lastDisconnect?.error?.output?.statusCode !==
         DisconnectReason.loggedOut;
       console.log("📴 Koneksi terputus. Reconnect?", shouldReconnect);
-
       if (shouldReconnect) startBot();
+    } else if (connection === "connecting" || !!qr) {
+      try {
+        const phoneNumber = process.env.BOT_PHONE_NUMBER;
+        const pairingCode = await sock.requestPairingCode(phoneNumber);
+        console.log("🔑 Pairing Code:", pairingCode);
+        console.log(
+          "➡️  Masukkan kode ini di WhatsApp: *Perangkat Tertaut* > *Tautkan Perangkat* > *Kode Pairing*"
+        );
+      } catch (err) {
+        console.error("❌ Gagal membuat pairing code:", err);
+      }
     } else if (connection === "open") {
       console.log("✅ Terhubung ke WhatsApp!");
 
@@ -44,15 +50,12 @@ async function startBot() {
             process.env.OWNER_NUMBER,
             process.env.PARTNER_NUMBER,
           ];
-
           for (const number of targets) {
             await sendDailyQuote(sock, number);
           }
           console.log("📅 Kutipan harian berhasil dikirim.");
         },
-        {
-          timezone: "Asia/Jakarta",
-        }
+        { timezone: "Asia/Jakarta" }
       );
     }
   });
