@@ -32,7 +32,7 @@ async function startBot() {
     } else if (connection === "connecting" || !!qr) {
       try {
         const phoneNumber = process.env.BOT_PHONE_NUMBER;
-        const pairingCode = await sock.requestPairingCode(phoneNumber);
+        const pairingCode = await sock.requestPairingCode(`${phoneNumber}`);
         console.log("🔑 Pairing Code:", pairingCode);
         console.log(
           "➡️  Masukkan kode ini di WhatsApp: *Perangkat Tertaut* > *Tautkan Perangkat* > *Kode Pairing*"
