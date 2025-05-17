@@ -16,7 +16,7 @@ const { useSQLiteAuthState } = require("./db/auth-state");
 const pino = require("pino");
 
 const logger = pino({
-  level: process.env.NODE_ENV === "production" ? "error" : "debug",
+  level: process.env.NODE_ENV === "production" ? "info" : "debug",
 });
 
 const rl = readline.createInterface({
